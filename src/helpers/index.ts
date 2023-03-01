@@ -1,0 +1,1 @@
+export { createNumberSprite } from './createNumberSprite';
