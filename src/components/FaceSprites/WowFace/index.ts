@@ -1,0 +1,1 @@
+export { WowFace } from './WowFace';

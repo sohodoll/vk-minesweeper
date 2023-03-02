@@ -1,4 +1,3 @@
-import { DefaultCell } from 'components/CellSprites';
 import { useState } from 'react';
 import { Cell, Cells } from './components/Cells';
 
@@ -8,7 +7,15 @@ export function Playground() {
   const renderCells = () => {
     return cells.map((arr, i) =>
       arr.map((cell, j) => {
-        return <Cell key={i + j} />;
+        return (
+          <Cell
+            key={i + j}
+            state={cell.state}
+            value={cell.value}
+            row={i}
+            col={j}
+          />
+        );
       })
     );
   };

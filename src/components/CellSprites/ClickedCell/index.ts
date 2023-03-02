@@ -1,0 +1,1 @@
+export { ClickedCell } from './ClickedCell';
