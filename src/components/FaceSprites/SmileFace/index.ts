@@ -1,0 +1,1 @@
+export { SmileFace } from './SmileFace';

@@ -23,5 +23,6 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'import/no-extraneous-dependencies': 'off',
     'import/prefer-default-export': 'off',
+    'react/no-array-index-key': 'off',
   },
 };

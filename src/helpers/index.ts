@@ -1,1 +1,1 @@
-export { createNumberSprite } from './createNumberSprite';
+export { createSprite } from './createSprite';
