@@ -30,6 +30,7 @@ const numberMap: Record<string, JSX.Element> = {
 
 export function CountDisplay({ value }: CountDisplayProps) {
   const displayContent = value
+    .padStart(3, '0')
     .split('')
     .map((char, index) => <div key={index}>{numberMap[char]}</div>);
 

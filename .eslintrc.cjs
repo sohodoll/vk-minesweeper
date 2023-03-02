@@ -24,5 +24,6 @@ module.exports = {
     'import/no-extraneous-dependencies': 'off',
     'import/prefer-default-export': 'off',
     'react/no-array-index-key': 'off',
+    'no-plusplus': 'off',
   },
 };
