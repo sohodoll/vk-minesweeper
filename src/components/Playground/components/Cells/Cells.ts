@@ -9,7 +9,7 @@ export const Cells = (): Array<Array<CellType>> => {
     for (let j = 0; j < 16; j++) {
       cellsArray[i].push({
         value: CellValue.neutral,
-        state: CellState.open,
+        state: CellState.default,
       });
     }
   }
