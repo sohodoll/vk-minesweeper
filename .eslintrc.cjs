@@ -25,5 +25,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'react/no-array-index-key': 'off',
     'no-plusplus': 'off',
+    'prefer-const': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
   },
 };

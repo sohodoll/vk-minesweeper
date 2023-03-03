@@ -13,6 +13,7 @@ export const createSprite = (backgroundPosition: string, type?: string) => {
 
   return (
     <div
+      id={type}
       className={classname}
       style={{
         backgroundImage: `url(${sprite})`,

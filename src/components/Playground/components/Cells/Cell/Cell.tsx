@@ -12,7 +12,7 @@ import {
   SevenMines,
   EightMines,
 } from 'components/CellSprites';
-import { useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import { CellState, CellValue } from '../types';
 import { CellProps } from './types';
 
@@ -20,10 +20,12 @@ const renderCellByStateAndValue = (state: number, value: number) => {
   if (state === CellState.default) {
     return DefaultCell();
   }
+
+  if (state === CellState.flagged) {
+    return FlaggedCell();
+  }
+
   if (state === CellState.open) {
-    if (value === CellValue.one) {
-      return OneMine();
-    }
     if (value === CellValue.one) {
       return OneMine();
     }
@@ -65,40 +67,35 @@ export function Cell({ col, row, state, value }: CellProps) {
   const [cellState, setCellState] = useState(state);
   const [cellValue, setCellValue] = useState(value);
 
-  const handleCellMouseDown = () => {
-    if (value === CellValue.mine) {
+  const handleCellMouseDown = (e: MouseEvent) => {
+    if (e.button === 0) {
       setCellState(CellState.open);
       setCellValue(value);
-    } else {
-      setCellState(CellState.open);
+
+      sessionStorage.setItem('game', 'true');
     }
   };
 
-  // const handleCellMouseUpLeave = () => {
-  //   setCellState(CellState.default);
-  // };
+  const handleRightClick = (e: MouseEvent) => {
+    e.preventDefault();
+    if (cellState !== CellState.open) {
+      if (cellState === CellState.default) {
+        setCellState(CellState.flagged);
+        return;
+      }
+      setCellState(CellState.default);
+    }
+  };
 
   return (
     <div
+      id="cell"
       role="button"
       tabIndex={0}
       onMouseDown={handleCellMouseDown}
-      // onMouseUp={handleCellMouseUpLeave}
+      onContextMenu={handleRightClick}
     >
       {renderCellByStateAndValue(cellState, cellValue)}
     </div>
   );
 }
-
-// state !== CellState.open
-//         ? // value !== CellValue.mine &&
-//           // value !== CellValue.one &&
-//           // value !== CellValue.two &&
-//           // value !== CellValue.three &&
-//           // value !== CellValue.four &&
-//           // value !== CellValue.five &&
-//           // value !== CellValue.six &&
-//           // value !== CellValue.seven &&
-//           // value !== CellValue.eight
-//           renderCellByState(cellState)
-//         : renderCellByValue(cellValue)
