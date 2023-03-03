@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import {
   DefaultCell,
   ClickedCell,
@@ -12,7 +13,6 @@ import {
   SevenMines,
   EightMines,
 } from 'components/CellSprites';
-import { MouseEvent, useState } from 'react';
 import { CellState, CellValue } from '../types';
 import { CellProps } from './types';
 
@@ -63,39 +63,41 @@ const renderCellByStateAndValue = (state: number, value: number) => {
   return null;
 };
 
-export function Cell({ col, row, state, value }: CellProps) {
-  const [cellState, setCellState] = useState(state);
-  const [cellValue, setCellValue] = useState(value);
+export function Cell({
+  col,
+  row,
+  state,
+  value,
+  onClick,
+  onContext,
+}: CellProps) {
+  // const handleCellMouseDown = (e: MouseEvent) => {
+  //   if (e.button === 0) {
+  //     setCellState(CellState.open);
+  //     setCellValue(value);
+  //   }
+  // };
 
-  const handleCellMouseDown = (e: MouseEvent) => {
-    if (e.button === 0) {
-      setCellState(CellState.open);
-      setCellValue(value);
-
-      sessionStorage.setItem('game', 'true');
-    }
-  };
-
-  const handleRightClick = (e: MouseEvent) => {
-    e.preventDefault();
-    if (cellState !== CellState.open) {
-      if (cellState === CellState.default) {
-        setCellState(CellState.flagged);
-        return;
-      }
-      setCellState(CellState.default);
-    }
-  };
+  // const handleRightClick = (e: MouseEvent) => {
+  //   e.preventDefault();
+  //   if (cellState !== CellState.open) {
+  //     if (cellState === CellState.default) {
+  //       setCellState(CellState.flagged);
+  //       return;
+  //     }
+  //     setCellState(CellState.default);
+  //   }
+  // };
 
   return (
     <div
       id="cell"
       role="button"
+      onClick={onClick(row, col)}
       tabIndex={0}
-      onMouseDown={handleCellMouseDown}
-      onContextMenu={handleRightClick}
+      onContextMenu={onContext(row, col)}
     >
-      {renderCellByStateAndValue(cellState, cellValue)}
+      {renderCellByStateAndValue(state, value)}
     </div>
   );
 }

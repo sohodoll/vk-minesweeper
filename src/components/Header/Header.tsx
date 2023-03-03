@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { CountDisplay } from './components/CountDisplay';
 import { Face } from './components/Face';
 
 export function Header() {
   const [faceState, setFaceState] = useState('default');
-  let [time, setTime] = useState(0);
+  const [time, setTime] = useState(0);
+  const timerRef = useRef<NodeJS.Timer>();
 
   const handleFaceMouseUp = () => {
     setFaceState('default');
@@ -13,24 +14,28 @@ export function Header() {
   useEffect(() => {
     const handleMouseDown = (e: MouseEvent) => {
       const clickedElement = e.target as HTMLElement;
+
       if (clickedElement.id === 'smile') {
         setFaceState('clicked');
+        setTime(0);
+        sessionStorage.setItem('game', 'false');
+        sessionStorage.setItem('isTimer', 'false');
+
+        clearInterval(timerRef.current);
       } else if (clickedElement.id === 'cell') {
         setFaceState('cellPressed');
         const game = sessionStorage.getItem('game');
         const isTimer = sessionStorage.getItem('isTimer');
 
-        let timer;
-
-        if (game === 'true' && !isTimer) {
+        if ((game === 'true' && isTimer === 'false') || !isTimer) {
           sessionStorage.setItem('isTimer', 'true');
-          timer = setInterval(() => {
-            setTime(time++);
+          timerRef.current = setInterval(() => {
+            setTime((t) => t + 1);
           }, 1000);
         }
 
-        if (game === 'won') {
-          clearInterval(timer);
+        if (game === 'won' || game === 'false') {
+          clearInterval(timerRef.current);
         }
       }
     };
@@ -45,8 +50,9 @@ export function Header() {
     return () => {
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
+      clearInterval(timerRef.current);
     };
-  });
+  }, []);
 
   return (
     <div className="w-full h-12 border-2 border-t-gray-400 border-l-gray-400 border-r-white border-b-white flex justify-around items-center">
