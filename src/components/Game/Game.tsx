@@ -30,27 +30,39 @@ export function Game() {
     );
   };
 
-  useEffect(() => {
-    const handleMouseDown = (): void => {
-      if (!hasLost) {
-        setFaceState('cellPressed');
-      }
-    };
+  // const handlePlaygroundMouseDown = (): void => {
+  //   if (!hasLost && !hasWon) {
+  //     setFaceState('cellPressed');
+  //   }
+  // };
 
-    const handleMouseUp = (): void => {
-      if (!hasLost) {
-        setFaceState('default');
-      }
-    };
+  // const handlePlaygroundMouseUp = (): void => {
+  //   if (!hasLost && !hasWon) {
+  //     setFaceState('default');
+  //   }
+  // };
 
-    window.addEventListener('mousedown', handleMouseDown);
-    window.addEventListener('mouseup', handleMouseUp);
+  // useEffect(() => {
+  //   const handleMouseDown = (): void => {
+  //     if (!hasLost && !game) {
+  //       setFaceState('cellPressed');
+  //     }
+  //   };
 
-    return () => {
-      window.removeEventListener('mousedown', handleMouseDown);
-      window.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [hasLost]);
+  //   const handleMouseUp = (): void => {
+  //     if (!hasLost && !game) {
+  //       setFaceState('default');
+  //     }
+  //   };
+
+  //   window.addEventListener('mousedown', handleMouseDown);
+  //   window.addEventListener('mouseup', handleMouseUp);
+
+  //   return () => {
+  //     window.removeEventListener('mousedown', handleMouseDown);
+  //     window.removeEventListener('mouseup', handleMouseUp);
+  //   };
+  // }, [hasLost, game]);
 
   useEffect(() => {
     if (game && time < 999) {
@@ -185,6 +197,7 @@ export function Game() {
 
         if (currentCell.state === CellState.default && e.button === 0) {
           currentCells[row][col].state = CellState.pending;
+          setFaceState('cellPressed');
         }
       }
     };
@@ -199,6 +212,7 @@ export function Game() {
 
       if (currentCell.state === CellState.pending && e.button === 0) {
         currentCells[row][col].state = CellState.default;
+        setFaceState('default');
       }
     };
 
