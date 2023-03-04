@@ -1,3 +1,4 @@
+import { getAdjacentCells } from '../../../Game/helpers/getAdjacentCells';
 import { CellValue, CellState, CellType } from './types';
 
 export const Cells = (): Array<Array<CellType>> => {
@@ -37,58 +38,39 @@ export const Cells = (): Array<Array<CellType>> => {
       if (currentCell.value !== CellValue.mine) {
         let adjacentMines = 0;
 
-        const topLeftMine =
-          rowIndex > 0 && columnIndex > 0
-            ? cellsArray[rowIndex - 1][columnIndex - 1]
-            : null;
+        const {
+          topLeftCell,
+          topCell,
+          topRightCell,
+          leftCell,
+          rightCell,
+          bottomLeftCell,
+          bottomCell,
+          bottomRightCell,
+        } = getAdjacentCells(cellsArray, rowIndex, columnIndex);
 
-        const topMine =
-          rowIndex > 0 ? cellsArray[rowIndex - 1][columnIndex] : null;
-
-        const topRightMine =
-          rowIndex > 0 && columnIndex < 15
-            ? cellsArray[rowIndex - 1][columnIndex + 1]
-            : null;
-
-        const leftMine =
-          columnIndex > 0 ? cellsArray[rowIndex][columnIndex - 1] : null;
-
-        const rightMine =
-          columnIndex < 15 ? cellsArray[rowIndex][columnIndex + 1] : null;
-
-        const bottomLeftMine =
-          rowIndex < 15 && columnIndex > 0
-            ? cellsArray[rowIndex + 1][columnIndex - 1]
-            : null;
-        const bottomMine =
-          rowIndex < 15 ? cellsArray[rowIndex + 1][columnIndex] : null;
-        const bottomRightMine =
-          rowIndex < 15 && columnIndex < 15
-            ? cellsArray[rowIndex + 1][columnIndex + 1]
-            : null;
-
-        if (topLeftMine?.value === CellValue.mine) {
+        if (topLeftCell?.value === CellValue.mine) {
           adjacentMines++;
         }
-        if (topMine?.value === CellValue.mine) {
+        if (topCell?.value === CellValue.mine) {
           adjacentMines++;
         }
-        if (topRightMine?.value === CellValue.mine) {
+        if (topRightCell?.value === CellValue.mine) {
           adjacentMines++;
         }
-        if (leftMine?.value === CellValue.mine) {
+        if (leftCell?.value === CellValue.mine) {
           adjacentMines++;
         }
-        if (rightMine?.value === CellValue.mine) {
+        if (rightCell?.value === CellValue.mine) {
           adjacentMines++;
         }
-        if (bottomLeftMine?.value === CellValue.mine) {
+        if (bottomLeftCell?.value === CellValue.mine) {
           adjacentMines++;
         }
-        if (bottomMine?.value === CellValue.mine) {
+        if (bottomCell?.value === CellValue.mine) {
           adjacentMines++;
         }
-        if (bottomRightMine?.value === CellValue.mine) {
+        if (bottomRightCell?.value === CellValue.mine) {
           adjacentMines++;
         }
 

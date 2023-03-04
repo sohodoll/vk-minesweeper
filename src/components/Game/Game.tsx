@@ -1,8 +1,12 @@
 import { useState, useEffect, MouseEvent } from 'react';
 import { CountDisplay } from 'components/Header/components/CountDisplay';
 import { Cell, Cells } from 'components/Playground/components/Cells';
-import { CellState } from 'components/Playground/components/Cells/types';
+import {
+  CellState,
+  CellValue,
+} from 'components/Playground/components/Cells/types';
 import { Face } from 'components/Header/components/Face';
+import { handleNeutralCells } from './helpers/handleNeutralCells';
 
 export function Game() {
   const [faceState, setFaceState] = useState('default');
@@ -48,44 +52,66 @@ export function Game() {
     setMinesCount(40);
   };
 
-  const handleCellClick = (row: number, column: number) => (): void => {
-    setGame(true);
+  const handleCellClick = (row: number, col: number) => (): void => {
+    if (!game) {
+      setGame(true);
+    }
+
+    const currentCell = cells[row][col];
+    let newCells = cells.slice();
+
+    if (
+      currentCell.state === CellState.flagged ||
+      currentCell.state === CellState.open
+    ) {
+      return;
+    }
+
+    if (currentCell.value === CellValue.mine) {
+      //
+    } else if (currentCell.value === CellValue.neutral) {
+      newCells = handleNeutralCells(newCells, row, col);
+      setCells(newCells);
+    } else {
+      newCells[row][col].state = CellState.open;
+      setCells(newCells);
+    }
   };
 
   const handleCellMouseDown =
-    (rowParam: number, colParam: number) =>
+    (row: number, col: number) =>
     (e: MouseEvent<HTMLDivElement, MouseEvent>): void => {
       e.preventDefault();
 
       const currentCells = cells.slice();
-      const currentCell = cells[rowParam][colParam];
+      const currentCell = cells[row][col];
 
       if (currentCell.state === CellState.default && e.button === 0) {
-        currentCells[rowParam][colParam].state = CellState.pending;
+        currentCells[row][col].state = CellState.pending;
       }
     };
 
   const handleCellMouseUpLeave =
-    (rowParam: number, colParam: number) =>
+    (row: number, col: number) =>
     (e: MouseEvent<HTMLDivElement, MouseEvent>): void => {
       e.preventDefault();
 
       const currentCells = cells.slice();
-      const currentCell = cells[rowParam][colParam];
+      const currentCell = cells[row][col];
 
       if (currentCell.state === CellState.pending && e.button === 0) {
-        currentCells[rowParam][colParam].state = CellState.default;
+        currentCells[row][col].state = CellState.default;
       }
     };
 
   const handleCellContext =
-    (rowParam: number, colParam: number) =>
+    (row: number, col: number) =>
     (e: MouseEvent<HTMLDivElement, MouseEvent>): void => {
       e.preventDefault();
 
       const currentCells = cells.slice();
 
-      const currentCell = cells[rowParam][colParam];
+      const currentCell = cells[row][col];
 
       if (!game || currentCell.state === CellState.open) {
         return;
@@ -93,14 +119,14 @@ export function Game() {
 
       if (currentCell.state === CellState.default) {
         if (minesCount > 0) {
-          currentCells[rowParam][colParam].state = CellState.flagged;
+          currentCells[row][col].state = CellState.flagged;
 
           setCells(currentCells);
 
           setMinesCount(minesCount - 1);
         }
       } else if (currentCell.state === CellState.flagged) {
-        currentCells[rowParam][colParam].state = CellState.default;
+        currentCells[row][col].state = CellState.default;
 
         setCells(currentCells);
 
