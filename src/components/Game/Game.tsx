@@ -16,10 +16,10 @@ export function Game() {
   const [game, setGame] = useState<boolean>(false);
   const [minesCount, setMinesCount] = useState<number>(40);
   const [hasLost, setHasLost] = useState(false);
+  const [hasWon, setHasWon] = useState(false);
 
   const revealMines = (row: number, col: number): Array<Array<CellType>> => {
     const currentCells = cells.slice();
-    const currentCell = currentCells[row][col];
 
     return currentCells.map((rowArr) =>
       rowArr.map((cell) => {
@@ -36,11 +36,15 @@ export function Game() {
 
   useEffect(() => {
     const handleMouseDown = (): void => {
-      setFaceState('cellPressed');
+      if (!hasLost) {
+        setFaceState('cellPressed');
+      }
     };
 
     const handleMouseUp = (): void => {
-      setFaceState('default');
+      if (!hasLost) {
+        setFaceState('default');
+      }
     };
 
     window.addEventListener('mousedown', handleMouseDown);
@@ -50,7 +54,7 @@ export function Game() {
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, []);
+  }, [hasLost]);
 
   useEffect(() => {
     if (game && time < 999) {
@@ -70,16 +74,40 @@ export function Game() {
     setCells(Cells());
     setMinesCount(40);
     setHasLost(false);
+    setHasWon(false);
+  };
+
+  const handleFaceMouseDown = () => {
+    setFaceState('clicked');
+  };
+
+  const handleFaceMouseUpLeave = () => {
+    setFaceState('default');
   };
 
   const handleCellClick = (row: number, col: number) => (): void => {
     if (!hasLost) {
+      let newCells = cells.slice();
+
       if (!game) {
+        if (newCells[row][col].value === CellValue.mine) {
+          let isCellMine = true;
+
+          while (isCellMine) {
+            newCells = Cells();
+
+            if (newCells[row][col].value !== CellValue.mine) {
+              isCellMine = false;
+              break;
+            }
+          }
+        }
+
+        setCells(newCells);
         setGame(true);
       }
 
-      const currentCell = cells[row][col];
-      let newCells = cells.slice();
+      const currentCell = newCells[row][col];
 
       if (
         currentCell.state === CellState.flagged ||
@@ -97,11 +125,43 @@ export function Game() {
         setCells(newCells);
       } else if (currentCell.value === CellValue.neutral) {
         newCells = handleNeutralCells(newCells, row, col);
-        setCells(newCells);
       } else {
         newCells[row][col].state = CellState.open;
         setCells(newCells);
       }
+
+      let areSafeCellsLeft = false;
+
+      for (let i = 0; row < 16; i++) {
+        for (let j = 0; col < 16; j++) {
+          const thisCurrentCell = newCells[i][j];
+
+          if (
+            thisCurrentCell.value !== CellValue.mine &&
+            thisCurrentCell.state === CellState.default
+          ) {
+            areSafeCellsLeft = true;
+            break;
+          }
+        }
+      }
+
+      if (!areSafeCellsLeft) {
+        newCells = newCells.map((thisRow) =>
+          thisRow.map((cell) => {
+            if (cell.value === CellValue.mine) {
+              return {
+                ...cell,
+                state: CellState.flagged,
+              };
+            }
+            return cell;
+          })
+        );
+        setHasWon(true);
+      }
+
+      setCells(newCells);
     }
   };
 
@@ -111,6 +171,13 @@ export function Game() {
       setGame(false);
     }
   }, [hasLost]);
+
+  useEffect(() => {
+    if (hasWon) {
+      setGame(false);
+      setFaceState('won');
+    }
+  }, [hasWon]);
 
   const handleCellMouseDown =
     (row: number, col: number) =>
@@ -196,7 +263,14 @@ export function Game() {
         className="w-full h-12 border-2 border-t-gray-400 border-l-gray-400 border-r-white border-b-white flex justify-around items-center"
       >
         <CountDisplay value={String(minesCount)} />
-        <div onClick={handleFaceClick} role="button" tabIndex={0}>
+        <div
+          onMouseDown={handleFaceMouseDown}
+          onMouseUp={handleFaceMouseUpLeave}
+          onMouseLeave={handleFaceMouseUpLeave}
+          onClick={handleFaceClick}
+          role="button"
+          tabIndex={0}
+        >
           <Face state={faceState} />
         </div>
 
