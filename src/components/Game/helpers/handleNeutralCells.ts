@@ -1,8 +1,5 @@
-import {
-  CellState,
-  CellType,
-} from 'components/Playground/components/Cells/types';
-import { CellValue } from '../../Playground/components/Cells/types';
+import { CellState, CellType } from 'components/Cells/types';
+import { CellValue } from '../../Cells/types';
 import { getAdjacentCells } from './getAdjacentCells';
 
 export const handleNeutralCells = (

@@ -1,7 +1,4 @@
-import {
-  CellState,
-  CellType,
-} from 'components/Playground/components/Cells/types';
+import { CellState, CellType } from 'components/Cells/types';
 
 export const getAdjacentCells = (
   cells: Array<Array<CellType>>,

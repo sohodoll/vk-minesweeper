@@ -12,6 +12,7 @@ import {
   SevenMines,
   EightMines,
   RedMineCell,
+  QuestionCell,
 } from 'components/CellSprites';
 import { CellState, CellValue } from '../types';
 import { CellProps } from './types';
@@ -23,6 +24,10 @@ const renderCellByStateAndValue = (state: number, value: number) => {
 
   if (state === CellState.flagged) {
     return FlaggedCell();
+  }
+
+  if (state === CellState.questioned) {
+    return QuestionCell();
   }
 
   if (state === CellState.pending) {

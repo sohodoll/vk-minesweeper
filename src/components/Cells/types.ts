@@ -17,6 +17,7 @@ export enum CellState {
   pending,
   open,
   flagged,
+  questioned,
 }
 
 export type CellType = {

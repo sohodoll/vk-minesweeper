@@ -1,4 +1,4 @@
-import { getAdjacentCells } from '../../../Game/helpers/getAdjacentCells';
+import { getAdjacentCells } from '../Game/helpers/getAdjacentCells';
 import { CellValue, CellState, CellType } from './types';
 
 export const Cells = (): Array<Array<CellType>> => {

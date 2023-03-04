@@ -1,11 +1,7 @@
 import { useState, useEffect, MouseEvent } from 'react';
 import { CountDisplay } from 'components/Header/components/CountDisplay';
-import { Cell, Cells } from 'components/Playground/components/Cells';
-import {
-  CellState,
-  CellType,
-  CellValue,
-} from 'components/Playground/components/Cells/types';
+import { Cell, Cells } from 'components/Cells';
+import { CellState, CellType, CellValue } from 'components/Cells/types';
 import { Face } from 'components/Header/components/Face';
 import { handleNeutralCells } from './helpers/handleNeutralCells';
 
@@ -228,11 +224,15 @@ export function Game() {
           setMinesCount(minesCount - 1);
         }
       } else if (currentCell.state === CellState.flagged) {
-        currentCells[row][col].state = CellState.default;
+        currentCells[row][col].state = CellState.questioned;
 
         setCells(currentCells);
 
         setMinesCount(minesCount + 1);
+      } else if (currentCell.state === CellState.questioned) {
+        currentCells[row][col].state = CellState.default;
+
+        setCells(currentCells);
       }
     };
 
