@@ -1,4 +1,4 @@
-#Minesweeper Game
+# Minesweeper Game
 
 A minesweeper game built for the VK test task. Development branch: **develop**.
 
