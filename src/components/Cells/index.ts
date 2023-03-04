@@ -1,2 +1,2 @@
 export { Cells } from './Cells';
-export { Cell } from './Cell';
+export { Cell } from './components/Cell';

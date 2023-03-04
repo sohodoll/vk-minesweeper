@@ -1,4 +1,4 @@
-import { CellState, CellValue } from '../types';
+import { CellState, CellValue } from '../../types';
 
 export type CellProps = {
   row: number;

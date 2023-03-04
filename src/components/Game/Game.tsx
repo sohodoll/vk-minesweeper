@@ -1,8 +1,8 @@
 import { useState, useEffect, MouseEvent } from 'react';
-import { CountDisplay } from 'components/Header/components/CountDisplay';
 import { Cell, Cells } from 'components/Cells';
 import { CellState, CellType, CellValue } from 'components/Cells/types';
-import { Face } from 'components/Header/components/Face';
+import { Face } from 'components/Game/components/Face';
+import { CountDisplay } from './components/CountDisplay';
 import { handleNeutralCells } from './helpers/handleNeutralCells';
 
 export function Game() {
@@ -30,39 +30,7 @@ export function Game() {
     );
   };
 
-  // const handlePlaygroundMouseDown = (): void => {
-  //   if (!hasLost && !hasWon) {
-  //     setFaceState('cellPressed');
-  //   }
-  // };
-
-  // const handlePlaygroundMouseUp = (): void => {
-  //   if (!hasLost && !hasWon) {
-  //     setFaceState('default');
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const handleMouseDown = (): void => {
-  //     if (!hasLost && !game) {
-  //       setFaceState('cellPressed');
-  //     }
-  //   };
-
-  //   const handleMouseUp = (): void => {
-  //     if (!hasLost && !game) {
-  //       setFaceState('default');
-  //     }
-  //   };
-
-  //   window.addEventListener('mousedown', handleMouseDown);
-  //   window.addEventListener('mouseup', handleMouseUp);
-
-  //   return () => {
-  //     window.removeEventListener('mousedown', handleMouseDown);
-  //     window.removeEventListener('mouseup', handleMouseUp);
-  //   };
-  // }, [hasLost, game]);
+  // handle timer
 
   useEffect(() => {
     if (game && time < 999) {
@@ -75,6 +43,8 @@ export function Game() {
       };
     }
   }, [game, time]);
+
+  // handle face clicks and states
 
   const handleFaceClick = (): void => {
     setGame(false);
@@ -92,6 +62,22 @@ export function Game() {
   const handleFaceMouseUpLeave = () => {
     setFaceState('default');
   };
+
+  useEffect(() => {
+    if (hasLost) {
+      setFaceState('lost');
+      setGame(false);
+    }
+  }, [hasLost]);
+
+  useEffect(() => {
+    if (hasWon) {
+      setGame(false);
+      setFaceState('won');
+    }
+  }, [hasWon]);
+
+  // handle cell clicks
 
   const handleCellClick = (row: number, col: number) => (): void => {
     if (!hasLost) {
@@ -173,20 +159,6 @@ export function Game() {
     }
   };
 
-  useEffect(() => {
-    if (hasLost) {
-      setFaceState('lost');
-      setGame(false);
-    }
-  }, [hasLost]);
-
-  useEffect(() => {
-    if (hasWon) {
-      setGame(false);
-      setFaceState('won');
-    }
-  }, [hasWon]);
-
   const handleCellMouseDown =
     (row: number, col: number) =>
     (e: MouseEvent<HTMLDivElement, MouseEvent>): void => {
@@ -249,6 +221,8 @@ export function Game() {
         setCells(currentCells);
       }
     };
+
+  // handle cells rendering
 
   const renderCells = () => {
     return cells.map((arr, i) =>

@@ -14,7 +14,7 @@ import {
   RedMineCell,
   QuestionCell,
 } from 'components/CellSprites';
-import { CellState, CellValue } from '../types';
+import { CellState, CellValue } from '../../types';
 import { CellProps } from './types';
 
 const renderCellByStateAndValue = (state: number, value: number) => {
