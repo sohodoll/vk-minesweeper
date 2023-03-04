@@ -1,0 +1,1 @@
+export { WonFace } from './WonFace';

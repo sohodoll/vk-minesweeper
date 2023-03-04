@@ -10,3 +10,4 @@ export { FiveMines } from './FiveMines';
 export { SixMines } from './SixMines';
 export { SevenMines } from './SevenMines';
 export { EightMines } from './EightMines';
+export { RedMineCell } from './RedMineCell';

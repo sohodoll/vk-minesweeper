@@ -3,6 +3,7 @@ import { CountDisplay } from 'components/Header/components/CountDisplay';
 import { Cell, Cells } from 'components/Playground/components/Cells';
 import {
   CellState,
+  CellType,
   CellValue,
 } from 'components/Playground/components/Cells/types';
 import { Face } from 'components/Header/components/Face';
@@ -14,6 +15,24 @@ export function Game() {
   const [cells, setCells] = useState(Cells());
   const [game, setGame] = useState<boolean>(false);
   const [minesCount, setMinesCount] = useState<number>(40);
+  const [hasLost, setHasLost] = useState(false);
+
+  const revealMines = (row: number, col: number): Array<Array<CellType>> => {
+    const currentCells = cells.slice();
+    const currentCell = currentCells[row][col];
+
+    return currentCells.map((rowArr) =>
+      rowArr.map((cell) => {
+        if (cell.value === CellValue.mine) {
+          return {
+            ...cell,
+            state: CellState.open,
+          };
+        }
+        return cell;
+      })
+    );
+  };
 
   useEffect(() => {
     const handleMouseDown = (): void => {
@@ -50,44 +69,60 @@ export function Game() {
     setTime(0);
     setCells(Cells());
     setMinesCount(40);
+    setHasLost(false);
   };
 
   const handleCellClick = (row: number, col: number) => (): void => {
-    if (!game) {
-      setGame(true);
-    }
+    if (!hasLost) {
+      if (!game) {
+        setGame(true);
+      }
 
-    const currentCell = cells[row][col];
-    let newCells = cells.slice();
+      const currentCell = cells[row][col];
+      let newCells = cells.slice();
 
-    if (
-      currentCell.state === CellState.flagged ||
-      currentCell.state === CellState.open
-    ) {
-      return;
-    }
+      if (
+        currentCell.state === CellState.flagged ||
+        currentCell.state === CellState.open
+      ) {
+        return;
+      }
 
-    if (currentCell.value === CellValue.mine) {
-      //
-    } else if (currentCell.value === CellValue.neutral) {
-      newCells = handleNeutralCells(newCells, row, col);
-      setCells(newCells);
-    } else {
-      newCells[row][col].state = CellState.open;
-      setCells(newCells);
+      if (currentCell.value === CellValue.mine) {
+        setHasLost(true);
+        newCells[row][col].value = CellValue.redMine;
+        newCells[row][col].state = CellState.open;
+
+        newCells = revealMines(row, col);
+        setCells(newCells);
+      } else if (currentCell.value === CellValue.neutral) {
+        newCells = handleNeutralCells(newCells, row, col);
+        setCells(newCells);
+      } else {
+        newCells[row][col].state = CellState.open;
+        setCells(newCells);
+      }
     }
   };
+
+  useEffect(() => {
+    if (hasLost) {
+      setFaceState('lost');
+      setGame(false);
+    }
+  }, [hasLost]);
 
   const handleCellMouseDown =
     (row: number, col: number) =>
     (e: MouseEvent<HTMLDivElement, MouseEvent>): void => {
       e.preventDefault();
+      if (!hasLost) {
+        const currentCells = cells.slice();
+        const currentCell = cells[row][col];
 
-      const currentCells = cells.slice();
-      const currentCell = cells[row][col];
-
-      if (currentCell.state === CellState.default && e.button === 0) {
-        currentCells[row][col].state = CellState.pending;
+        if (currentCell.state === CellState.default && e.button === 0) {
+          currentCells[row][col].state = CellState.pending;
+        }
       }
     };
 

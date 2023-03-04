@@ -11,6 +11,7 @@ import {
   SixMines,
   SevenMines,
   EightMines,
+  RedMineCell,
 } from 'components/CellSprites';
 import { CellState, CellValue } from '../types';
 import { CellProps } from './types';
@@ -55,6 +56,10 @@ const renderCellByStateAndValue = (state: number, value: number) => {
     }
     if (value === CellValue.mine) {
       return MineCell();
+    }
+
+    if (value === CellValue.redMine) {
+      return RedMineCell();
     }
 
     return ClickedCell();

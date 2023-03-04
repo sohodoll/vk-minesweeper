@@ -9,6 +9,7 @@ export enum CellValue {
   seven,
   eight,
   mine,
+  redMine,
 }
 
 export enum CellState {
