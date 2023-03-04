@@ -25,3 +25,5 @@ A minesweeper game built for the VK test task. Development branch: **develop**.
 2. git checkout develop
 3. npm install
 4. npm run dev
+
+Built with <3
