@@ -27,5 +27,7 @@ module.exports = {
     'no-plusplus': 'off',
     'prefer-const': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
+    'consistent-return': 'off',
+    'jsx-a11y/click-events-have-key-events': 'off',
   },
 };

@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import {
   DefaultCell,
   ClickedCell,
@@ -23,6 +22,10 @@ const renderCellByStateAndValue = (state: number, value: number) => {
 
   if (state === CellState.flagged) {
     return FlaggedCell();
+  }
+
+  if (state === CellState.pending) {
+    return ClickedCell();
   }
 
   if (state === CellState.open) {
@@ -56,9 +59,6 @@ const renderCellByStateAndValue = (state: number, value: number) => {
 
     return ClickedCell();
   }
-  if (state === CellState.flagged) {
-    return FlaggedCell();
-  }
 
   return null;
 };
@@ -70,25 +70,9 @@ export function Cell({
   value,
   onClick,
   onContext,
+  onMouseDown,
+  onMouseUpLeave,
 }: CellProps) {
-  // const handleCellMouseDown = (e: MouseEvent) => {
-  //   if (e.button === 0) {
-  //     setCellState(CellState.open);
-  //     setCellValue(value);
-  //   }
-  // };
-
-  // const handleRightClick = (e: MouseEvent) => {
-  //   e.preventDefault();
-  //   if (cellState !== CellState.open) {
-  //     if (cellState === CellState.default) {
-  //       setCellState(CellState.flagged);
-  //       return;
-  //     }
-  //     setCellState(CellState.default);
-  //   }
-  // };
-
   return (
     <div
       id="cell"
@@ -96,6 +80,9 @@ export function Cell({
       onClick={onClick(row, col)}
       tabIndex={0}
       onContextMenu={onContext(row, col)}
+      onMouseDown={onMouseDown(row, col)}
+      onMouseUp={onMouseUpLeave(row, col)}
+      onMouseLeave={onMouseUpLeave(row, col)}
     >
       {renderCellByStateAndValue(state, value)}
     </div>

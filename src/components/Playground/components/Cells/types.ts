@@ -13,6 +13,7 @@ export enum CellValue {
 
 export enum CellState {
   default,
+  pending,
   open,
   flagged,
 }

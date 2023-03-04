@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useState, useEffect, MouseEvent } from 'react';
 import { CountDisplay } from 'components/Header/components/CountDisplay';
 import { Cell, Cells } from 'components/Playground/components/Cells';
@@ -10,6 +9,7 @@ export function Game() {
   const [time, setTime] = useState(0);
   const [cells, setCells] = useState(Cells());
   const [game, setGame] = useState<boolean>(false);
+  const [minesCount, setMinesCount] = useState<number>(40);
 
   useEffect(() => {
     const handleMouseDown = (): void => {
@@ -29,7 +29,6 @@ export function Game() {
     };
   }, []);
 
-  // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (game && time < 999) {
       const timer = setInterval(() => {
@@ -46,13 +45,14 @@ export function Game() {
     setGame(false);
     setTime(0);
     setCells(Cells());
+    setMinesCount(40);
   };
 
   const handleCellClick = (row: number, column: number) => (): void => {
     setGame(true);
   };
 
-  const handleCellContext =
+  const handleCellMouseDown =
     (rowParam: number, colParam: number) =>
     (e: MouseEvent<HTMLDivElement, MouseEvent>): void => {
       e.preventDefault();
@@ -60,13 +60,51 @@ export function Game() {
       const currentCells = cells.slice();
       const currentCell = cells[rowParam][colParam];
 
-      if (currentCell.state === CellState.open) {
-        // eslint-disable-next-line no-useless-return
+      if (currentCell.state === CellState.default && e.button === 0) {
+        currentCells[rowParam][colParam].state = CellState.pending;
+      }
+    };
+
+  const handleCellMouseUpLeave =
+    (rowParam: number, colParam: number) =>
+    (e: MouseEvent<HTMLDivElement, MouseEvent>): void => {
+      e.preventDefault();
+
+      const currentCells = cells.slice();
+      const currentCell = cells[rowParam][colParam];
+
+      if (currentCell.state === CellState.pending && e.button === 0) {
+        currentCells[rowParam][colParam].state = CellState.default;
+      }
+    };
+
+  const handleCellContext =
+    (rowParam: number, colParam: number) =>
+    (e: MouseEvent<HTMLDivElement, MouseEvent>): void => {
+      e.preventDefault();
+
+      const currentCells = cells.slice();
+
+      const currentCell = cells[rowParam][colParam];
+
+      if (!game || currentCell.state === CellState.open) {
         return;
-        // eslint-disable-next-line no-else-return
-      } else if (currentCell.state === CellState.default) {
-        currentCells[rowParam][colParam].state = CellState.flagged;
+      }
+
+      if (currentCell.state === CellState.default) {
+        if (minesCount > 0) {
+          currentCells[rowParam][colParam].state = CellState.flagged;
+
+          setCells(currentCells);
+
+          setMinesCount(minesCount - 1);
+        }
+      } else if (currentCell.state === CellState.flagged) {
+        currentCells[rowParam][colParam].state = CellState.default;
+
         setCells(currentCells);
+
+        setMinesCount(minesCount + 1);
       }
     };
 
@@ -77,6 +115,8 @@ export function Game() {
           <Cell
             onClick={handleCellClick}
             onContext={handleCellContext}
+            onMouseDown={handleCellMouseDown}
+            onMouseUpLeave={handleCellMouseUpLeave}
             key={i + j}
             state={cell.state}
             value={cell.value}
@@ -94,7 +134,7 @@ export function Game() {
         id="Header"
         className="w-full h-12 border-2 border-t-gray-400 border-l-gray-400 border-r-white border-b-white flex justify-around items-center"
       >
-        <CountDisplay value="40" />
+        <CountDisplay value={String(minesCount)} />
         <div onClick={handleFaceClick} role="button" tabIndex={0}>
           <Face state={faceState} />
         </div>
