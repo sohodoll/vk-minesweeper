@@ -84,7 +84,5 @@ export const Cells = (): Array<Array<CellType>> => {
     }
   }
 
-  console.log(cellsArray);
-
   return cellsArray;
 };

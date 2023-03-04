@@ -132,8 +132,8 @@ export function Game() {
 
       let areSafeCellsLeft = false;
 
-      for (let i = 0; row < 16; i++) {
-        for (let j = 0; col < 16; j++) {
+      for (let i = 0; i < 16; i++) {
+        for (let j = 0; j < 16; j++) {
           const thisCurrentCell = newCells[i][j];
 
           if (
