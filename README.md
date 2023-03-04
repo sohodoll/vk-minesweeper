@@ -22,5 +22,6 @@ A minesweeper game built for the VK test task.
 **'Hard' way**:
 
 1. Fork and clone this repo
-2. npm install
-3. npm run dev
+2. git checkout develop
+3. npm install
+4. npm run dev
