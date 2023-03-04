@@ -18,6 +18,7 @@ A minesweeper game built for the VK test task. Development branch: **develop**.
 ## How to play
 
 **Easy way** -> https://minesweeperbysoho.netlify.app/
+
 **'Hard' way**:
 
 1. Fork and clone this repo
