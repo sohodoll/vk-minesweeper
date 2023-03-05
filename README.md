@@ -26,4 +26,8 @@ A minesweeper game built for the VK test task. Development branch: **develop**.
 3. npm install
 4. npm run dev
 
+## Used Stack
+
+**Typescript**, **Tailwind**, **PostCSS**, **Vite**
+
 Built with <3
