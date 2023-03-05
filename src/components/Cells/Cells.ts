@@ -1,13 +1,14 @@
+import { ROWS, COLS } from 'variables/constants';
 import { getAdjacentCells } from '../Game/helpers/getAdjacentCells';
 import { CellValue, CellState, CellType } from './types';
 
 export const Cells = (): Array<Array<CellType>> => {
   const cellsArray: Array<Array<CellType>> = [];
 
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < COLS; i++) {
     cellsArray.push([]);
 
-    for (let j = 0; j < 16; j++) {
+    for (let j = 0; j < ROWS; j++) {
       cellsArray[i].push({
         value: CellValue.neutral,
         state: CellState.default,
@@ -18,8 +19,8 @@ export const Cells = (): Array<Array<CellType>> => {
   let minesSet = 0;
 
   while (minesSet < 40) {
-    const randomRow = Math.floor(Math.random() * 16);
-    const randomColumn = Math.floor(Math.random() * 16);
+    const randomRow = Math.floor(Math.random() * ROWS);
+    const randomColumn = Math.floor(Math.random() * COLS);
     const currentCell = cellsArray[randomRow][randomColumn];
 
     if (currentCell.value !== CellValue.mine) {
@@ -31,8 +32,8 @@ export const Cells = (): Array<Array<CellType>> => {
     }
   }
 
-  for (let rowIndex = 0; rowIndex < 16; rowIndex++) {
-    for (let columnIndex = 0; columnIndex < 16; columnIndex++) {
+  for (let rowIndex = 0; rowIndex < ROWS; rowIndex++) {
+    for (let columnIndex = 0; columnIndex < COLS; columnIndex++) {
       const currentCell = cellsArray[rowIndex][columnIndex];
 
       if (currentCell.value !== CellValue.mine) {

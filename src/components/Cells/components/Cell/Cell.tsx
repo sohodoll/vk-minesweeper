@@ -18,59 +18,43 @@ import { CellState, CellValue } from '../../types';
 import { CellProps } from './types';
 
 const renderCellByStateAndValue = (state: number, value: number) => {
-  if (state === CellState.default) {
-    return DefaultCell();
+  switch (state) {
+    case CellState.default:
+      return DefaultCell();
+    case CellState.flagged:
+      return FlaggedCell();
+    case CellState.questioned:
+      return QuestionCell();
+    case CellState.pending:
+      return ClickedCell();
+    case CellState.open:
+      switch (value) {
+        case CellValue.one:
+          return OneMine();
+        case CellValue.two:
+          return TwoMines();
+        case CellValue.three:
+          return ThreeMines();
+        case CellValue.four:
+          return FourMines();
+        case CellValue.five:
+          return FiveMines();
+        case CellValue.six:
+          return SixMines();
+        case CellValue.seven:
+          return SevenMines();
+        case CellValue.eight:
+          return EightMines();
+        case CellValue.mine:
+          return MineCell();
+        case CellValue.redMine:
+          return RedMineCell();
+        default:
+          return ClickedCell();
+      }
+    default:
+      return null;
   }
-
-  if (state === CellState.flagged) {
-    return FlaggedCell();
-  }
-
-  if (state === CellState.questioned) {
-    return QuestionCell();
-  }
-
-  if (state === CellState.pending) {
-    return ClickedCell();
-  }
-
-  if (state === CellState.open) {
-    if (value === CellValue.one) {
-      return OneMine();
-    }
-    if (value === CellValue.two) {
-      return TwoMines();
-    }
-    if (value === CellValue.three) {
-      return ThreeMines();
-    }
-    if (value === CellValue.four) {
-      return FourMines();
-    }
-    if (value === CellValue.five) {
-      return FiveMines();
-    }
-    if (value === CellValue.six) {
-      return SixMines();
-    }
-    if (value === CellValue.seven) {
-      return SevenMines();
-    }
-    if (value === CellValue.eight) {
-      return EightMines();
-    }
-    if (value === CellValue.mine) {
-      return MineCell();
-    }
-
-    if (value === CellValue.redMine) {
-      return RedMineCell();
-    }
-
-    return ClickedCell();
-  }
-
-  return null;
 };
 
 export function Cell({

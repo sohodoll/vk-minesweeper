@@ -5,7 +5,7 @@ export const createSprite = (backgroundPosition: string, type?: string) => {
 
   if (type === 'cell') {
     classname = 'w-[1rem] h-4';
-  } else if (type === 'smile') {
+  } else if (type === 'emoji') {
     classname = 'w-[1.6rem] h-[1.5rem]';
   } else {
     classname = 'w-[0.85rem] h-[1.4rem]';

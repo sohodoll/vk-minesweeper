@@ -5,23 +5,22 @@ import {
   LostFace,
 } from 'components/FaceSprites';
 import { WonFace } from 'components/FaceSprites/WonFace';
+import { FaceProps, FaceType } from './types';
 
-export function Face(props: { state: string }) {
-  const { state } = props;
-
-  if (state === 'default') {
+export function Face({ state }: FaceProps) {
+  if (state === FaceType.default) {
     return SmileFace();
   }
-  if (state === 'clicked') {
+  if (state === FaceType.pressed) {
     return ClickedFace();
   }
-  if (state === 'cellPressed') {
+  if (state === FaceType.wowFace) {
     return WowFace();
   }
-  if (state === 'lost') {
+  if (state === FaceType.lost) {
     return LostFace();
   }
-  if (state === 'won') {
+  if (state === FaceType.won) {
     return WonFace();
   }
   return null;

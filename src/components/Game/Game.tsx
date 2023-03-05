@@ -1,12 +1,13 @@
 import { useState, useEffect, MouseEvent } from 'react';
 import { Cell, Cells } from 'components/Cells';
 import { CellState, CellType, CellValue } from 'components/Cells/types';
-import { Face } from 'components/Game/components/Face';
-import { CountDisplay } from './components/CountDisplay';
-import { handleNeutralCells } from './helpers/handleNeutralCells';
+import { COLS, ROWS } from 'variables/constants';
+import { Face, CountDisplay } from './components';
+import { handleNeutralCells } from './helpers';
+import { FaceType } from './components/Face/types';
 
 export function Game() {
-  const [faceState, setFaceState] = useState('default');
+  const [faceState, setFaceState] = useState(FaceType.default);
   const [time, setTime] = useState(0);
   const [cells, setCells] = useState(Cells());
   const [game, setGame] = useState<boolean>(false);
@@ -56,16 +57,16 @@ export function Game() {
   };
 
   const handleFaceMouseDown = () => {
-    setFaceState('clicked');
+    setFaceState(FaceType.pressed);
   };
 
   const handleFaceMouseUpLeave = () => {
-    setFaceState('default');
+    setFaceState(FaceType.default);
   };
 
   useEffect(() => {
     if (hasLost) {
-      setFaceState('lost');
+      setFaceState(FaceType.lost);
       setGame(false);
     }
   }, [hasLost]);
@@ -73,7 +74,7 @@ export function Game() {
   useEffect(() => {
     if (hasWon) {
       setGame(false);
-      setFaceState('won');
+      setFaceState(FaceType.won);
     }
   }, [hasWon]);
 
@@ -126,8 +127,8 @@ export function Game() {
 
       let areSafeCellsLeft = false;
 
-      for (let i = 0; i < 16; i++) {
-        for (let j = 0; j < 16; j++) {
+      for (let i = 0; i < ROWS; i++) {
+        for (let j = 0; j < COLS; j++) {
           const thisCurrentCell = newCells[i][j];
 
           if (
@@ -169,7 +170,7 @@ export function Game() {
 
         if (currentCell.state === CellState.default && e.button === 0) {
           currentCells[row][col].state = CellState.pending;
-          setFaceState('cellPressed');
+          setFaceState(FaceType.wowFace);
         }
       }
     };
@@ -184,11 +185,11 @@ export function Game() {
 
       if (currentCell.state === CellState.pending && e.button === 0) {
         currentCells[row][col].state = CellState.default;
-        setFaceState('default');
+        setFaceState(FaceType.default);
       }
     };
 
-  const handleCellContext =
+  const handleCellRightClick =
     (row: number, col: number) =>
     (e: MouseEvent<HTMLDivElement, MouseEvent>): void => {
       e.preventDefault();
@@ -230,7 +231,7 @@ export function Game() {
         return (
           <Cell
             onClick={handleCellClick}
-            onContext={handleCellContext}
+            onContext={handleCellRightClick}
             onMouseDown={handleCellMouseDown}
             onMouseUpLeave={handleCellMouseUpLeave}
             key={i + j}
