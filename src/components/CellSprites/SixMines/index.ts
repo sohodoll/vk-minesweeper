@@ -1,0 +1,1 @@
+export { SixMines } from './SixMines';

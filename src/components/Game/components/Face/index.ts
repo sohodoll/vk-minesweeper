@@ -1,0 +1,1 @@
+export { Face } from './Face';
