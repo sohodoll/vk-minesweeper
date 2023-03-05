@@ -195,8 +195,7 @@ export function Game() {
       e.preventDefault();
 
       const currentCells = cells.slice();
-
-      const currentCell = cells[row][col];
+      const currentCell = currentCells[row][col];
 
       if (!game || currentCell.state === CellState.open) {
         return;
