@@ -28,6 +28,6 @@ A minesweeper game built for the VK test task. Development branch: **develop**.
 
 ## Used Stack
 
-**Typescript**, **Tailwind**, **PostCSS**, **Vite**
+**Typescript**, **React**, **Tailwind**, **PostCSS**, **Vite**
 
 Built with <3
